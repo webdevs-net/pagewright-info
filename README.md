@@ -109,15 +109,6 @@ through. Pagewright is built around that:
 <!-- TODO(screenshot): the change history page, with one "Went live" card and
 its What / Before / After table. Use a demo site, not a client's. -->
 
-## Under the hood
-
-- Built on the **Model Context Protocol (MCP)**, the open standard Claude and
-  ChatGPT use for connectors.
-- Made for fast, custom **Next.js** websites. Content is read on every request,
-  so edits appear without a rebuild.
-- Fonts are **self-hosted** from your own site's address.
-- Runs alongside your site in **Docker**, on hosting we manage.
-
 ## Getting started
 
 Pagewright comes with the websites we build. It isn't sold separately.

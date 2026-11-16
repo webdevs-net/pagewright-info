@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pagewright — Edit your website by just asking</title>
+<meta name="description" content="Change your website's words, photos, colors and more by asking Claude or ChatGPT. Every change is previewed first, and any change can be undone.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf7f2;
+    --surface: #ffffff;
+    --ink: #1d2320;
+    --muted: #5b625e;
+    --line: #e6e0d6;
+    --accent: #2f5d50;
+    --accent-ink: #ffffff;
+    --accent-soft: #e5efe9;
+    --warm: #c8743a;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 400 17px/1.6 Inter, system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-family: Fraunces, Georgia, serif; font-weight: 600; line-height: 1.15; margin: 0; }
+  h1 { font-size: clamp(2.3rem, 5vw, 3.6rem); letter-spacing: -0.01em; }
+  h2 { font-size: clamp(1.8rem, 3.5vw, 2.5rem); }
+  h3 { font-size: 1.2rem; }
+  p { margin: 0; }
+  a { color: inherit; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 88px 0; }
+  .eyebrow { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--warm); margin-bottom: 14px; }
+  .lead { font-size: 1.2rem; color: var(--muted); max-width: 36em; }
+  .center { text-align: center; }
+  .center .lead { margin: 18px auto 0; }
+
+  .btn { display: inline-block; padding: 14px 26px; border-radius: 999px; font-weight: 600; text-decoration: none; transition: transform .15s ease, background .15s ease; }
+  .btn-primary { background: var(--accent); color: var(--accent-ink); }
+  .btn-primary:hover { background: #244a40; transform: translateY(-1px); }
+  .btn-ghost { color: var(--accent); }
+  .btn-ghost:hover { text-decoration: underline; }
+
+  /* nav */
+  nav { padding: 22px 0; }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-family: Fraunces, Georgia, serif; font-size: 1.4rem; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+  .logo-mark { width: 30px; height: 30px; border-radius: 8px; background: var(--accent); display: grid; place-items: center; color: #fff; font-size: 1rem; }
+  nav .links { display: flex; gap: 28px; align-items: center; font-size: 0.95rem; }
+  nav .links a { text-decoration: none; color: var(--muted); }
+  nav .links a:hover { color: var(--ink); }
+  nav .links .btn { color: var(--accent-ink); padding: 10px 20px; }
+
+  /* hero */
+  .hero { padding: 48px 0 140px; }
+  .hero .wrap { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: center; }
+  .hero p.lead { margin: 22px 0 32px; }
+  .hero .ctas { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .hero .small { margin-top: 18px; font-size: 0.9rem; color: var(--muted); }
+
+  .demo { position: relative; }
+  .chat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 20px 50px -20px rgba(29,35,32,.25); padding: 22px; display: flex; flex-direction: column; gap: 12px; }
+  .chat-head { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--muted); padding-bottom: 10px; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #7fb59a; }
+  .bubble { max-width: 85%; padding: 11px 15px; border-radius: 16px; font-size: 0.95rem; line-height: 1.45; opacity: 0; transform: translateY(6px); animation: pop .4s ease forwards; }
+  .me { align-self: flex-end; background: var(--accent); color: #fff; border-bottom-right-radius: 4px; }
+  .ai { align-self: flex-start; background: #f1ede6; border-bottom-left-radius: 4px; }
+  .ai a { color: var(--accent); font-weight: 500; }
+  .bubble:nth-child(2) { animation-delay: .2s; }
+  .bubble:nth-child(3) { animation-delay: 1s; }
+  .bubble:nth-child(4) { animation-delay: 1.8s; }
+  .bubble:nth-child(5) { animation-delay: 2.6s; }
+  @keyframes pop { to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .bubble { animation: none; opacity: 1; transform: none; } }
+
+  .site-card { position: absolute; right: -28px; bottom: -112px; width: 58%; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; box-shadow: 0 18px 40px -18px rgba(29,35,32,.35); }
+  .site-bar { display: flex; gap: 5px; padding: 8px 10px; background: #f3efe8; }
+  .site-bar span { width: 7px; height: 7px; border-radius: 50%; background: #d6cfc3; }
+  .site-flag { background: var(--warm); color: #fff; font-size: 0.65rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; text-align: center; padding: 4px; }
+  .site-hero { padding: 22px 16px; background: linear-gradient(135deg, #3c4a43, #26302b); color: #fff; }
+  .site-hero b { font-family: Fraunces, Georgia, serif; font-size: 1.05rem; display: block; }
+  .site-hero i { font-style: normal; font-size: 0.7rem; opacity: .75; }
+
+  /* problem */
+  .problem { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .cards3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
+  .card { background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; }
+  .card h3 { margin-bottom: 10px; }
+  .card p { color: var(--muted); }
+  .card.good { background: var(--accent-soft); border-color: #c9ddd2; }
+  .tag { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 3px 10px; border-radius: 999px; margin-bottom: 14px; background: #efe7dc; color: #8a5a35; }
+  .good .tag { background: var(--accent); color: #fff; }
+
+  /* steps */
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 52px; counter-reset: s; }
+  .step { position: relative; padding-top: 58px; }
+  .step::before { counter-increment: s; content: counter(s); position: absolute; top: 0; left: 0; width: 42px; height: 42px; border-radius: 50%; background: var(--accent); color: #fff; font-family: Fraunces, Georgia, serif; font-size: 1.2rem; display: grid; place-items: center; }
+  .step h3 { margin-bottom: 8px; }
+  .step p { color: var(--muted); font-size: 0.97rem; }
+  .step q { display: block; margin-top: 12px; font-style: italic; color: var(--ink); quotes: "“" "”"; font-size: 0.95rem; }
+
+  /* features */
+  .features { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 48px; }
+  .tile { border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; background: var(--bg); }
+  .tile .ic { width: 40px; height: 40px; border-radius: 10px; background: var(--accent-soft); display: grid; place-items: center; margin-bottom: 16px; }
+  .tile .ic svg { width: 20px; height: 20px; stroke: var(--accent); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .tile h3 { font-size: 1.05rem; margin-bottom: 6px; }
+  .tile p { font-size: 0.93rem; color: var(--muted); }
+
+  /* safety */
+  .safety .wrap { display: grid; grid-template-columns: 1fr 1.1fr; gap: 64px; align-items: center; }
+  .checks { list-style: none; padding: 0; margin: 0; display: grid; gap: 20px; }
+  .checks li { display: grid; grid-template-columns: 30px 1fr; gap: 14px; }
+  .checks .ck { width: 30px; height: 30px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-weight: 700; }
+  .checks b { display: block; margin-bottom: 2px; }
+  .checks span { color: var(--muted); font-size: 0.97rem; }
+  .safety .lead { margin-top: 18px; }
+
+  /* pricing */
+  .pricing { background: var(--accent); color: #fff; }
+  .pricing .eyebrow { color: #f2c29b; }
+  .pricing .lead { color: rgba(255,255,255,.8); }
+  .price-box { margin: 44px auto 0; max-width: 560px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.2); border-radius: var(--radius); padding: 36px; text-align: left; }
+  .price-box ul { list-style: none; padding: 0; margin: 20px 0 28px; display: grid; gap: 10px; }
+  .price-box li::before { content: "✓"; margin-right: 10px; color: #f2c29b; font-weight: 700; }
+  .price-box .btn { background: #fff; color: var(--accent); }
+  .todo { display: inline-block; background: #fff3c4; color: #6b5200; font: 600 0.75rem/1.4 Inter, sans-serif; padding: 3px 8px; border-radius: 6px; }
+
+  /* faq */
+  .faq .wrap { max-width: 780px; }
+  details { border-bottom: 1px solid var(--line); padding: 20px 0; }
+  summary { cursor: pointer; font-weight: 600; font-size: 1.05rem; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; color: var(--accent); font-size: 1.4rem; line-height: 1; }
+  details[open] summary::after { content: "–"; }
+  details p { margin-top: 12px; color: var(--muted); }
+
+  footer { padding: 40px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
+  footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+  @media (max-width: 900px) {
+    .hero .wrap, .safety .wrap { grid-template-columns: 1fr; gap: 72px; }
+    .site-card { right: 8px; bottom: -100px; }
+    .cards3 { grid-template-columns: 1fr; }
+    .steps, .grid4 { grid-template-columns: 1fr 1fr; }
+    nav .links a:not(.btn) { display: none; }
+  }
+  @media (max-width: 560px) {
+    section { padding: 64px 0; }
+    .wrap { padding: 0 16px; }
+    .steps, .grid4 { grid-template-columns: 1fr; }
+    .site-card { position: static; width: 100%; margin-top: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="logo" href="#"><span class="logo-mark">P</span>Pagewright</a>
+    <div class="links">
+      <a href="#how">How it works</a>
+      <a href="#what">What you can change</a>
+      <a href="#safe">Peace of mind</a>
+      <a href="#faq">Questions</a>
+      <a class="btn btn-primary" href="#contact">Get in touch</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Your website, on your terms</div>
+      <h1>Update your website by just asking.</h1>
+      <p class="lead">Tell Claude or ChatGPT what you'd like changed: new words, new photos, a fresh color. It's ready to preview in seconds. Like it? Say "make it live." No logins to learn, no waiting on a developer.</p>
+      <div class="ctas">
+        <a class="btn btn-primary" href="#contact">Get a website with Pagewright</a>
+        <a class="btn btn-ghost" href="#how">See how it works →</a>
+      </div>
+      <p class="small">Works with the AI assistant you already use.</p>
+    </div>
+
+    <div class="demo" aria-label="Example conversation">
+      <div class="chat">
+        <div class="chat-head"><span class="dot"></span> Chat with your AI assistant</div>
+        <div class="bubble me">Can you change our homepage headline to "Custom homes, built to last"?</div>
+        <div class="bubble ai">Done. Here's a preview: <a href="#how">see the homepage</a>. Want me to make it live?</div>
+        <div class="bubble me">Looks great. Make it live!</div>
+        <div class="bubble ai">It's live ✓ Your visitors can see the new headline now.</div>
+      </div>
+      <div class="site-card" aria-hidden="true">
+        <div class="site-bar"><span></span><span></span><span></span></div>
+        <div class="site-hero"><b>Custom homes, built to last</b><i>Your business · Home</i></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="problem">
+  <div class="wrap center">
+    <div class="eyebrow">Sound familiar?</div>
+    <h2>Keeping a website up to date shouldn't be a project.</h2>
+    <div class="cards3" style="text-align:left">
+      <div class="card">
+        <span class="tag">The old way</span>
+        <h3>Learn a website builder</h3>
+        <p>Another login, another dashboard, and one wrong drag can knock the whole page out of place.</p>
+      </div>
+      <div class="card">
+        <span class="tag">The old way</span>
+        <h3>Email your web person</h3>
+        <p>A typo fix or a new photo waits in someone's inbox for days, and small changes add up on the bill.</p>
+      </div>
+      <div class="card good">
+        <span class="tag">With Pagewright</span>
+        <h3>Just ask</h3>
+        <p>Describe the change in your own words to the AI assistant you already use. It's done in moments, and your site still looks professionally designed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow">How it works</div>
+      <h2>Ask, preview, publish. That's it.</h2>
+      <p class="lead">We set everything up for you. From then on, changing your site is a conversation.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <h3>Connect once</h3>
+        <p>We send you a link and a password. Add them to Claude or ChatGPT and you're ready.</p>
+      </div>
+      <div class="step">
+        <h3>Ask for a change</h3>
+        <p>Use plain words, the way you'd ask a helpful assistant.</p>
+        <q>Add our new Riverside project to the portfolio, with these photos.</q>
+      </div>
+      <div class="step">
+        <h3>Preview it privately</h3>
+        <p>Every change goes to a private preview of your site first. Visitors and Google can't see it. You get a link to the exact page that changed.</p>
+      </div>
+      <div class="step">
+        <h3>Make it live</h3>
+        <p>Happy with it? Say "make it live" and it's on your real site instantly, with a short summary of what changed.</p>
+        <q>Actually, put it back the way it was.</q>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="what" class="features">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow">What you can change</div>
+      <h2>Much more than typos.</h2>
+      <p class="lead">Day-to-day updates and bigger refreshes, all within the design your site was built with.</p>
+    </div>
+    <div class="grid4">
+      <div class="tile">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 7V5h16v2M9 19h6M12 5v14"/></svg></div>
+        <h3>Words</h3>
+        <p>Headlines, descriptions, services, bios. Any text on your site.</p>
+      </div>
+      <div class="tile">
+        <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-8 8"/></svg></div>
+        <h3>Photos</h3>
+        <p>Share a link from Dropbox or Google Drive. Photos are made web-ready for you.</p>
+      </div>
+      <div class="tile">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div>
+        <h3>Projects, team and jobs</h3>
+        <p>Add, remove and reorder portfolio pieces, team members, services and job openings.</p>
+      </div>
+      <div class="tile">
+        <div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18c1.5 0 2-1 2-2s-1-1.5-1-2.5 1-1.5 2-1.5h2a4 4 0 0 0 4-4c0-4.4-4-8-9-8z"/><circle cx="7.5" cy="11" r="1"/><circle cx="11" cy="7.5" r="1"/></svg></div>
+        <h3>Colors</h3>
+        <p>Choose a ready-made color scheme or adjust single colors. Text always stays easy to read.</p>
+      </div>
+      <div class="tile">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M5 19 11 5h2l6 14M8 13h8"/></svg></div>
+        <h3>Fonts</h3>
+        <p>Pick from nearly 2,000 Google Fonts by name. Spell it wrong and you'll get suggestions.</p>
+      </div>
+      <div class="tile">
+        <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="18" height="7" rx="1"/></svg></div>
+        <h3>Layout</h3>
+        <p>Reorder homepage sections, adjust spacing and switch between the layouts your site offers.</p>
+      </div>
+      <div class="tile">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3 4 7v6c0 4.5 3.4 7.7 8 8 4.6-.3 8-3.5 8-8V7z"/></svg></div>
+        <h3>Logo and footer</h3>
+        <p>Swap your logo, resize it, update your tagline, phone number and footer links.</p>
+      </div>
+      <div class="tile">
+        <div class="ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div>
+        <h3>Google results</h3>
+        <p>Choose how each page's title and description appear in search results.</p>
+      </div>
+    </div>
+    <p class="center" style="margin-top:28px;color:var(--muted);font-size:.93rem">You can also choose who receives messages from your contact form.</p>
+  </div>
+</section>
+
+<section id="safe" class="safety">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Peace of mind</div>
+      <h2>Your site can't be broken by accident.</h2>
+      <p class="lead">Giving an AI the keys to your website sounds risky. That's why Pagewright is built with guardrails from top to bottom.</p>
+    </div>
+    <ul class="checks">
+      <li><span class="ck">✓</span><div><b>Nothing goes live without your OK</b><span>Every change waits on a private preview until you say "make it live."</span></div></li>
+      <li><span class="ck">✓</span><div><b>Undo anything</b><span>Your last 100 published versions are saved. Bring back any one of them with a single request.</span></div></li>
+      <li><span class="ck">✓</span><div><b>Mistakes are caught before they happen</b><span>A change that would break a page, a link or a photo is stopped, and your AI explains why in plain words.</span></div></li>
+      <li><span class="ck">✓</span><div><b>Your design stays your design</b><span>Changes stay within the look your site was built with, and colors are checked so text stays readable.</span></div></li>
+      <li><span class="ck">✓</span><div><b>Only you can make changes</b><span>Editing needs your private password. Your AI only ever sees your site's content, never anything behind the scenes.</span></div></li>
+      <li><span class="ck">✓</span><div><b>Every change is on record</b><span>We keep a history of what changed and when, so "what happened to that page?" always has an answer.</span></div></li>
+    </ul>
+  </div>
+</section>
+
+<section id="contact" class="pricing">
+  <div class="wrap center">
+    <div class="eyebrow">Getting started</div>
+    <h2>Comes with every website we build.</h2>
+    <p class="lead">Pagewright isn't an app you download. It's part of a custom website, designed and hosted by us, that you can then keep up to date yourself.</p>
+    <div class="price-box">
+      <span class="todo">TODO: pricing</span>
+      <ul>
+        <li>A custom-designed, fast website</li>
+        <li>Pagewright set up and connected for you</li>
+        <li>Hosting, private previews and saved versions</li>
+      </ul>
+      <a class="btn" href="#">Talk to us about your website</a>
+      <p style="margin-top:14px"><span class="todo">TODO: contact link (email or form)</span></p>
+    </div>
+  </div>
+</section>
+
+<section id="faq" class="faq">
+  <div class="wrap">
+    <div class="center" style="margin-bottom:28px">
+      <div class="eyebrow">Questions</div>
+      <h2>Good questions, honest answers.</h2>
+    </div>
+    <details>
+      <summary>Do I need to be technical?</summary>
+      <p>No. If you can type a request to Claude or ChatGPT, you can update your site. We handle all the setup, and you never see any code.</p>
+    </details>
+    <details>
+      <summary>Which AI assistants does it work with?</summary>
+      <p>Claude and ChatGPT. You use your own account, the same one you already chat with.</p>
+      <!-- TODO: confirm which Claude and ChatGPT plans allow adding a custom connector, and say so here. -->
+    </details>
+    <details>
+      <summary>What if I don't like a change?</summary>
+      <p>If it's still in the preview, just ask for it to be thrown away. If it's already live, ask to go back to an earlier version. Your last 100 published versions are kept.</p>
+    </details>
+    <details>
+      <summary>Can the AI wreck my site?</summary>
+      <p>No. It can only make the kinds of changes your site was built to accept, and anything that would break a page is refused. Nothing reaches your visitors until you approve it.</p>
+    </details>
+    <details>
+      <summary>How fast do changes show up?</summary>
+      <p>Right away. The preview updates as soon as the change is made, and your live site updates the moment you say so.</p>
+    </details>
+    <details>
+      <summary>Can more than one person on my team make changes?</summary>
+      <p>Yes. Anyone you share the editor password with can connect their own Claude or ChatGPT.</p>
+    </details>
+    <details>
+      <summary>What if I'd still rather have someone do it for me?</summary>
+      <p>That's fine. Pagewright is there when you want it. You can always reach out to us instead.</p>
+    </details>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Pagewright</span>
+    <span class="todo">TODO: company name and contact</span>
+  </div>
+</footer>
+
+</body>
+</html>
