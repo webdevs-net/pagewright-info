@@ -133,6 +133,8 @@
   .price-box ul { list-style: none; padding: 0; margin: 20px 0 28px; display: grid; gap: 10px; }
   .price-box li::before { content: "✓"; margin-right: 10px; color: #f2c29b; font-weight: 700; }
   .price-box .btn { background: #fff; color: var(--accent); }
+  .price-figure strong { display: block; font-family: Fraunces, Georgia, serif; font-size: 2rem; font-weight: 600; line-height: 1.2; }
+  .price-figure span { display: block; margin-top: 6px; color: rgba(255,255,255,.8); }
   .todo { display: inline-block; background: #fff3c4; color: #6b5200; font: 600 0.75rem/1.4 Inter, sans-serif; padding: 3px 8px; border-radius: 6px; }
 
   /* faq */
@@ -337,14 +339,17 @@
     <h2>Comes with every website we build.</h2>
     <p class="lead">Pagewright isn't an app you download. It's part of a custom website, designed and hosted by us, that you can then keep up to date yourself.</p>
     <div class="price-box">
-      <span class="todo">TODO: pricing</span>
+      <div class="price-figure">
+        <strong>From $8,500</strong>
+        <span>to design and build your site, then about $600 a year for hosting and upkeep.</span>
+      </div>
       <ul>
         <li>A custom-designed, fast website</li>
         <li>Pagewright set up and connected for you</li>
         <li>Hosting, private previews and saved versions</li>
       </ul>
-      <a class="btn" href="#">Talk to us about your website</a>
-      <p style="margin-top:14px"><span class="todo">TODO: contact link (email or form)</span></p>
+      <a class="btn" href="mailto:support@webdevs.net?subject=Pagewright%20website%20enquiry">Talk to us about your website</a>
+      <p style="margin-top:14px">Or call <a href="tel:+17207729972">(720)&nbsp;772-9972</a>.</p>
     </div>
   </div>
 </section>
@@ -361,8 +366,9 @@
     </details>
     <details>
       <summary>Which AI assistants does it work with?</summary>
-      <p>Claude and ChatGPT. You use your own account, the same one you already chat with.</p>
-      <!-- TODO: confirm which Claude and ChatGPT plans allow adding a custom connector, and say so here. -->
+      <p>Claude and ChatGPT. You use your own account, the same one you already chat with.
+      Adding a connector is supported on the current paid plans for both; we'll confirm your
+      specific plan works during setup, before you commit to anything.</p>
     </details>
     <details>
       <summary>What if I don't like a change?</summary>
@@ -389,8 +395,8 @@
 
 <footer>
   <div class="wrap">
-    <span>© 2026 Pagewright</span>
-    <span class="todo">TODO: company name and contact</span>
+    <span>© 2026 Pagewright — a <a href="https://webdevs.net">WebDevs</a> product</span>
+    <span><a href="mailto:support@webdevs.net">support@webdevs.net</a> · San Pedro, CA</span>
   </div>
 </footer>
 
