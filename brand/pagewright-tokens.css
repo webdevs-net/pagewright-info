@@ -1,0 +1,24 @@
+/* Pagewright design tokens, v0.1 (2026-11-20). Source of truth: DESIGN-SYSTEM.md.
+   Values match the live landing page (index.html). */
+:root {
+  --pw-bg: #faf7f2;
+  --pw-surface: #ffffff;
+  --pw-ink: #1d2320;
+  --pw-muted: #5b625e;
+  --pw-line: #e6e0d6;
+  --pw-accent: #2f5d50;
+  --pw-accent-hover: #244a40;
+  --pw-accent-ink: #ffffff;
+  --pw-accent-soft: #e5efe9;
+  --pw-warm: #c8743a;
+  --pw-ai-bubble: #f1ede6;
+
+  --pw-font-display: "Fraunces", Georgia, serif;
+  --pw-font-body: "Inter", system-ui, -apple-system, sans-serif;
+
+  --pw-radius: 14px;
+  --pw-radius-pill: 999px;
+  --pw-wrap: 1120px;
+  --pw-section-y: 88px;
+  --pw-shadow-float: 0 20px 50px -20px rgba(29, 35, 32, 0.25);
+}

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Proposal A: speech bubble with a pen nib">
+  <!-- PROPOSAL, not approved. A speech bubble (asking) holding a pen nib (the "wright", the maker). -->
+  <path fill="#2F5D50" d="M14 6h36a10 10 0 0 1 10 10v24a10 10 0 0 1-10 10H26l-11 9v-9h-1A10 10 0 0 1 4 40V16A10 10 0 0 1 14 6Z"/>
+  <path fill="#FFFFFF" d="M32 13l10 15-10 17-10-17Z"/>
+  <circle cx="32" cy="27" r="3" fill="#2F5D50"/>
+  <path d="M32 30v14" stroke="#2F5D50" stroke-width="2" stroke-linecap="round"/>
+</svg>
