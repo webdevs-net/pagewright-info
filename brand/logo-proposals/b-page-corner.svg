@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Proposal B: a page whose folded corner is a speech bubble">
+  <!-- PROPOSAL, not approved. A page (the website) with its corner folded into a speech-bubble tail, and an orange "preview" line. -->
+  <path fill="#2F5D50" d="M14 4h26l16 16v30a10 10 0 0 1-10 10H14A10 10 0 0 1 4 50V14A10 10 0 0 1 14 4Z"/>
+  <path fill="#E5EFE9" d="M40 4v10a6 6 0 0 0 6 6h10Z"/>
+  <rect x="14" y="26" width="30" height="5" rx="2.5" fill="#FFFFFF"/>
+  <rect x="14" y="36" width="22" height="5" rx="2.5" fill="#FFFFFF"/>
+  <rect x="14" y="46" width="14" height="5" rx="2.5" fill="#C8743A"/>
+</svg>
