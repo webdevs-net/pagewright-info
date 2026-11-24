@@ -35,8 +35,11 @@ make changes the site is built to accept.
 
 Business owners (builders, contractors, studios, local services) who want to
 change their own site's words, photos, colors and fonts without learning new
-software. If you can type a request to Claude or ChatGPT, you can edit your
-site.
+software. If you can type or speak a request to Claude or ChatGPT, you can
+edit your site. Talking is often quicker: the Claude and ChatGPT apps take
+voice input, and [Loquio](https://webdevs.net/portfolio/loquio), our free,
+on-device voice dictation app (coming soon), lets you speak a request into any
+app.
 
 ## How it works
 
